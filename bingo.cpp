@@ -2,19 +2,33 @@
 //
 
 #include <iostream>
+#include <algorithm>
+#include <vector>
+#include <Windows.h>   // 콘솔 형태 맞추기
+using namespace std;
 
-int main()
-{
-    std::cout << "Hello World!\n";
+void SetConsole() {
+    // 콘솔 제목 설정
+    SetConsoleTitle(TEXT("ImChaeHyeon Bingo Game"));
+
+    // 콘솔 핸들 가져오기
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
+    // 콘솔 배경색 및 글자색 설정 (배경: 하얀색, 글자: 검정색)
+    SetConsoleTextAttribute(hConsole, BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE);
+    system("cls"); // 변경된 배경색을 적용하려면 화면 초기화가 필요
+
+    // 콘솔 버퍼 크기 설정
+    COORD bufferSize = {20, 20};  // 열, 행
+    SetConsoleScreenBufferSize(hConsole, bufferSize);
+
+    // 콘솔 창 크기 설정
+    SMALL_RECT windowSize = {0, 0, 100, 50};  // 좌상단 (0,0)에서 우하단
+    SetConsoleWindowInfo(hConsole, TRUE, &windowSize);
 }
 
-// 프로그램 실행: <Ctrl+F5> 또는 [디버그] > [디버깅하지 않고 시작] 메뉴
-// 프로그램 디버그: <F5> 키 또는 [디버그] > [디버깅 시작] 메뉴
-
-// 시작을 위한 팁: 
-//   1. [솔루션 탐색기] 창을 사용하여 파일을 추가/관리합니다.
-//   2. [팀 탐색기] 창을 사용하여 소스 제어에 연결합니다.
-//   3. [출력] 창을 사용하여 빌드 출력 및 기타 메시지를 확인합니다.
-//   4. [오류 목록] 창을 사용하여 오류를 봅니다.
-//   5. [프로젝트] > [새 항목 추가]로 이동하여 새 코드 파일을 만들거나, [프로젝트] > [기존 항목 추가]로 이동하여 기존 코드 파일을 프로젝트에 추가합니다.
-//   6. 나중에 이 프로젝트를 다시 열려면 [파일] > [열기] > [프로젝트]로 이동하고 .sln 파일을 선택합니다.
+int main() {
+    SetConsole();
+    cout << "Hello, World! This is a customized console window.\n";
+    return 0;
+}
