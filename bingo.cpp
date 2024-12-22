@@ -6,6 +6,8 @@
 #include <vector>
 #include <Windows.h>   // 콘솔 형태 맞추기
 #include <conio.h>   // Visual Studio에서만 사용할 수 있고 리눅스나 OS X에서는 사용할 수 없습니다.
+#include <cstdlib>  // rand(), srand()
+#include <ctime>    // time()
 
 using namespace std;
 
@@ -59,6 +61,21 @@ bool isDuplicate(const vector<vector<int>>* userBingo, int* input) {
 }
 
 
+// 컴퓨터의 빙고판 생성
+void generateBingoBoard(vector<vector<int>>& bingoBoard) {
+    srand(static_cast<unsigned>(time(0)));  // 랜덤 시드 초기화
+
+    int count = 0;
+    while (count < 25) {  // 5x5 빙고판을 채울 때까지 반복
+        int num = rand() % 30 + 1;  // 1~30 사이의 랜덤 숫자 생성
+
+        if (!isDuplicate(&bingoBoard, &num)) {
+            bingoBoard[count / 5][count % 5] = num;  // 배열에 숫자 저장
+            count++;
+        }
+    }
+}
+
 int main() {
     SetConsole();
 
@@ -91,7 +108,8 @@ int main() {
         cout << "\n\n\n";
 
         // userBingo에 수 넣기
-        cout << "빙고" << count + 1 << "번째 칸 채우는 중  :  ";
+        cout << "5x5 빙고 게임을 시작합니다! (1 ~ 30 사이의 숫자 입력)" << endl;
+        cout << "빙고 " << count + 1 << "번째 칸 채우는 중  :  ";
         cin >> input;
 
         if (input < 1 || input > 30) {
@@ -112,6 +130,46 @@ int main() {
         userBingo[count / SIZE][count % SIZE] = input;
         count++; // 입력 개수 증가
         system("cls");
+    }
+
+    // 컴퓨터의 빙고 저장
+    vector<vector<int>> computerBingo(SIZE, vector<int>(SIZE, 0)); // 2차원 벡터 초기화;
+    generateBingoBoard(computerBingo);   // 컴퓨터 빙고판 채우기
+
+    // 빙고판 보여주는 거 함수로 빼기 필요함
+    // 유저 빙고 보여줌
+    cout << " 내 빙고판\n" << endl;
+    for (int i = 0; i < SIZE; i++)
+    {
+        cout << "----------------" << endl;
+        for (int j = 0; j < SIZE; j++)
+        {
+            cout << "|" << userBingo[i][j];
+            if (j == SIZE - 1) {
+                cout << "|" << endl;
+            }
+        }
+        if (i == SIZE - 1) {
+            cout << "----------------" << endl;
+        }
+    }
+    
+    cout << "\n\n" << endl;
+    // 컴퓨터 빙고 보여줌 (지금은 숫자 다 보이지만 추후 안 보이게 설정할 예정)
+    cout << " 컴퓨터 빙고판\n" << endl;
+    for (int i = 0; i < SIZE; i++)
+    {
+        cout << "----------------" << endl;
+        for (int j = 0; j < SIZE; j++)
+        {
+            cout << "|" << computerBingo[i][j];
+            if (j == SIZE - 1) {
+                cout << "|" << endl;
+            }
+        }
+        if (i == SIZE - 1) {
+            cout << "----------------" << endl;
+        }
     }
 
     cout << "Hello, World! This is a customized console window.\n";
